@@ -6,8 +6,6 @@ from .piece import Piece
 from .player import Player
 from . import draw
 
-
-
 VERBOSITY = 2
 DRAW = False
 DRAW_RESULTS = True
@@ -57,7 +55,10 @@ class Manager:
             for player in self.player_list:
                 if self.player_turn(player):
                     flag = True
-                if STEP_BY_STEP: input("")
+            
+            if STEP_BY_STEP: 
+                draw._board(self.logic.board)
+                input("")
             if self.round == MAX_ROUNDS: break
         timer = format(time.time()-timer,".2f")
         print(f"Game finished after {timer}s") # Print how long game took
@@ -83,14 +84,16 @@ class Manager:
         
 
     def player_turn(self, player):
+        player_string = draw.render_cell(player.colour, str(player))
+
         # If no pieces left -> End Turn
         available_pieces = self.player_pieces[player.colour-1]
         if len(available_pieces) == 0:
-            self.output_text(f"{str(player)} has no more pieces...", verbosity=2)
+            self.output_text(f"{player_string} has no more pieces...", verbosity=2)
             return False
         
         if DRAW: 
-            print(f"{str(player)}'s available pieces:")
+            print(f"{player_string}'s available pieces:")
             draw._pieces_in_row([_.piece for _ in available_pieces])
 
         if self.round == 1:
@@ -113,20 +116,20 @@ class Manager:
             # If no corners to place piece -> End Turn
             legal_corners = self.logic.find_legal_corners(player.colour)
             if len(legal_corners) == 0:
-                self.output_text(f"{str(player)} has no legal moves...", verbosity=2)
+                self.output_text(f"{player_string} has no legal moves...", verbosity=2)
                 return False
         
         # Get all possible moves
         legal_moves = self.logic.find_legal_moves(legal_corners, available_pieces, player.colour)
         # If no legal moves -> End Turn
         if len(legal_moves) == 0: 
-            self.output_text(f"{str(player)} has no legal moves...", verbosity=2)
+            self.output_text(f"{player_string} has no legal moves...", verbosity=2)
             return False
         
         # Get Move
-        final_move = player.generate_move(legal_moves, self.board)
+        final_move = player.generate_move(legal_moves, self.board, self.round)
        
-        self.output_text(f"{str(player)} placed {final_move[2]} at {final_move[1]}", verbosity=2)
+        self.output_text(f"{player_string} placed {final_move[2]} at {final_move[1]}", verbosity=2)
         if DRAW:
             draw._piece(final_move[0])
 

@@ -23,7 +23,7 @@ class Player:
     def __str__(self):
         return self.name
 
-    def generate_move(self, legal_moves, board):
-        return self.ai.generate_move(legal_moves, board)
+    def generate_move(self, legal_moves, board, round):
+        return self.ai.generate_move(legal_moves, board, round)
 
 

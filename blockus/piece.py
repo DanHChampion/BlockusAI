@@ -4,6 +4,7 @@ from . import draw
 class Piece:
     def __init__(self, type, colour):
         self.type = type
+        self.colour = colour
         piece, self.value = self.assign_piece(type)
         self.piece = transformations.set_colour(piece, colour)
         self.orientations = []

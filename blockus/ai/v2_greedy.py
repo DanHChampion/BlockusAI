@@ -1,8 +1,6 @@
 import random
-from operator import itemgetter
 
-
-def generate_move(legal_moves, board):
+def generate_move(legal_moves, board, round):
     # Pick move with highest value
 
     highest_value_moves = [legal_moves[0]]
