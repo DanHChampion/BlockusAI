@@ -1,6 +1,8 @@
 # Import
 import random
 import time
+import copy
+
 from .logic import Logic
 from .piece import Piece
 from .player import Player
@@ -41,6 +43,7 @@ class Manager:
         self.player_pieces = []
         for player in range(1,no_of_players+1):
             self.player_pieces.append([Piece(piece_type,player) for piece_type in available_pieces_types])
+        
 
     def start_game(self):
         print(f"Starting Game with {self.no_of_players} players...")
@@ -55,7 +58,7 @@ class Manager:
             for player in self.player_list:
                 if self.player_turn(player):
                     flag = True
-            
+
             if STEP_BY_STEP: 
                 draw._board(self.logic.board)
                 input("")
@@ -145,5 +148,8 @@ class Manager:
     def output_text(self, text, verbosity = 1):
         if verbosity <= VERBOSITY:
             print(text)
+
+    def get_board(self):
+        return copy.deepcopy(self.logic.board)
 
 
