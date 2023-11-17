@@ -31,17 +31,17 @@ class Piece:
             case "Z4" | "Z5":
                 return [self.piece, 
                         transformations.rotate_piece_clockwise(self.piece, 1),
-                        transformations.flip_piece_horizontal(self.piece),
-                        transformations.flip_piece_horizontal(transformations.rotate_piece_clockwise(self.piece, 1))]
+                        transformations.flip_piece_vertical(self.piece),
+                        transformations.flip_piece_vertical(transformations.rotate_piece_clockwise(self.piece, 1))]
             case "L4" | "Y" | "L5" | "N" | "F" | "P":
                 return [self.piece, 
                         transformations.rotate_piece_clockwise(self.piece, 1),
                         transformations.rotate_piece_clockwise(self.piece, 2),
                         transformations.rotate_piece_clockwise(self.piece, 3),
-                        transformations.flip_piece_horizontal(self.piece),
-                        transformations.flip_piece_horizontal(transformations.rotate_piece_clockwise(self.piece, 1)),
-                        transformations.flip_piece_horizontal(transformations.rotate_piece_clockwise(self.piece, 2)),
-                        transformations.flip_piece_horizontal(transformations.rotate_piece_clockwise(self.piece, 3))]
+                        transformations.flip_piece_vertical(self.piece),
+                        transformations.flip_piece_vertical(transformations.rotate_piece_clockwise(self.piece, 1)),
+                        transformations.flip_piece_vertical(transformations.rotate_piece_clockwise(self.piece, 2)),
+                        transformations.flip_piece_vertical(transformations.rotate_piece_clockwise(self.piece, 3))]
             case _:
                 raise ValueError(self.type,"is not a piece")
 

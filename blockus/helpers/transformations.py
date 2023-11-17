@@ -16,11 +16,6 @@ def rotate_piece_clockwise(piece, no_of_rotations):
 
     return rotated_piece
 
-# Flip a piece horizontally
-def flip_piece_horizontal(piece):
-    flipped_piece = [row[::-1] for row in piece]
-    return flipped_piece
-
 # Flip a piece vertically
 def flip_piece_vertical(piece):
     flipped_piece = piece[::-1]

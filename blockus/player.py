@@ -17,8 +17,8 @@ class Player:
                 case _:
                     raise ValueError(colour, "is not a colour")
         
-       
         self.ai = AI(ai)
+        self.finished = False
 
     def __str__(self):
         return self.name
