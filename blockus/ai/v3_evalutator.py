@@ -56,4 +56,4 @@ def evaluate_move(move, fake_board):
 
 
 def score_point(point, board_size):
-    return 1/math.sqrt(math.pow((board_size/2)-point[0],2)+math.pow((board_size/2)-point[1],2))
+    return 1/(math.sqrt(math.pow((board_size/2)-point[0],2)+math.pow((board_size/2)-point[1],2))+0.01)

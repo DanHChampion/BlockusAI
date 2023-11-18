@@ -1,12 +1,6 @@
 from operator import itemgetter
 import copy
 
-from .helpers import draw
-
-# Configurations
-DEBUG = False
-# Return the co-ordinates of all the corners where a cell of a piece can be placed
-
 
 def is_cell_within_bounds(board, cell): # cell = [row,col]
     rows = cols = len(board)
@@ -16,7 +10,7 @@ def is_cell_within_bounds(board, cell): # cell = [row,col]
 
 def is_cell_free(board, cell): # cell = [row,col]
     if is_cell_within_bounds(board, cell):
-        if board[cell[0]][cell[1]] == 0:
+        if get_cell_colour(board, cell) == 0:
             return True
     return False
 
@@ -97,7 +91,6 @@ def is_move_legal(board, move, colour, corner):
     
     if test_board[corner[0]][corner[1]] == 0:
         return False
-    # draw._board(test_board)
     return True
 
 def place_piece(board, colour, move):

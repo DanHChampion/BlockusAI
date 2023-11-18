@@ -1,25 +1,28 @@
 # Import
-import random
 import time
-import copy
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+dotenv_path = Path('configurations/.env')
+load_dotenv(dotenv_path=dotenv_path)
 
 from . import logic
 from .helpers.piece import Piece
 from .player import Player
 from .helpers import draw
 
-VERBOSITY = True
-DRAW = False
-DRAW_RESULTS = False
-STEP_BY_STEP = False
-MAX_ROUNDS = -1
-ALL_PIECES = ["I1", "I2", "I3", "I4", "I5", "V3", "O4", "Z4", "T4", "L4", "U", "P", "Y", "L5", "N", "X", "W", "F", "T", "V5", "Z5"]
+VERBOSITY = os.environ.get("VERBOSITY").lower() in ('true', '1', 't')
+DRAW = os.environ.get("DRAW").lower() in ('true', '1', 't')
+DRAW_RESULTS = os.environ.get("DRAW_RESULTS").lower() in ('true', '1', 't')
+STEP_BY_STEP = os.environ.get("STEP_BY_STEP").lower() in ('true', '1', 't')
+MAX_ROUNDS = int(os.environ.get("MAX_ROUNDS"))
 
 class Manager:
-    def __init__(self, no_of_players, available_pieces_types = ALL_PIECES, ai_versions = None):
+    def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None):
         # Initialise Game
         self.round = 0
-        self.turn = 1
+        self.turn = 0
         # Check if input values are correct
         
         # If AI versions aren't specified
@@ -57,7 +60,6 @@ class Manager:
             for player in self.player_list:
                 if self.player_turn(player):
                     flag = True
-
             if STEP_BY_STEP: 
                 draw._board(self.board)
                 input("")
@@ -87,6 +89,7 @@ class Manager:
 
     def player_turn(self, player):
         player_string = draw.render_cell(player.colour, str(player))
+        self.turn += 1
 
         # If player finished -> End Turn
         if player.finished:
@@ -136,7 +139,11 @@ class Manager:
             self.output_text(f"{player_string} has no legal moves...")
             return False
         
+        if player.ai.version == "hu":
+            self.turn -= 1
+            return True
         # Get Move
+        
         final_move = player.generate_move(legal_moves, self.board, self.round)
        
         self.output_text(f"{player_string} placed {final_move[2]} at {final_move[1]}")
@@ -150,7 +157,6 @@ class Manager:
         self.board = logic.place_piece(self.board, player.colour, final_move)
 
         # End Turn
-        self.turn += 1
         return True
     
     def output_text(self, text):
