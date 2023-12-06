@@ -46,8 +46,6 @@ def run(manager):
     flag = True
     end_game_check = 0
     round = manager.round
-    timer = time.time()
-
 
     # Game Loop
     print("Playing...")
@@ -77,8 +75,6 @@ def run(manager):
 
             if end_game_check == NO_OF_PLAYERS:
                 flag = False
-                timer = format(time.time()-timer,".2f")
-                print(f"Game finished after {timer}s") # Print how long game took
                 manager.end_game()
         
         render.render_board(SCREEN, grid, CENTER)

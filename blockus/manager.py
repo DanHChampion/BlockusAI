@@ -23,7 +23,7 @@ class Manager:
         # Initialise Game
         self.round = 0
         self.turn = 0
-        self.timer = 0
+        self.start_time = time.time()
         # Check if input values are correct
         
         # If AI versions aren't specified
@@ -52,8 +52,6 @@ class Manager:
         print(f"Starting game with {self.no_of_players} players...")
         flag = True
         # Game Loop
-        print("Playing...")
-        self.timer = time.time()
         while(flag):
             self.round += 1
             self.output_text(f"Round: {self.round}")
@@ -65,12 +63,12 @@ class Manager:
                 draw._board(self.board)
                 input("")
             if self.round == MAX_ROUNDS: break
-        self.timer = format(time.time()-self.timer,".2f")
         self.end_game()
 
     def end_game(self):
-        print("\nShowing results...")
-        print(f"Game finished after {self.timer}s") # Print how long game took
+        runtime = format(time.time()-self.start_time,".2f")
+        print("Showing results...")
+        print(f"Game finished after {runtime}s") # Print how long game took
         print(f"Played a total of {self.round} rounds")
 
         if DRAW_RESULTS:
@@ -139,9 +137,6 @@ class Manager:
             self.output_text(f"{player_string} has no legal moves...")
             return False
         
-        if player.ai.version == "hu":
-            self.turn -= 1
-            return True
         # Get Move
         
         final_move = player.generate_move(legal_moves, self.board, self.round)

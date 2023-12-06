@@ -1,4 +1,8 @@
 import math
+from colorama import init, Fore, Style
+
+# Initialize colorama (Windows only)
+init(convert=True)
 
 BIG_BLOCK = "███"
 BLOCK = "■"
@@ -6,13 +10,13 @@ BLOCK = "■"
 def render_cell(value, item = BLOCK):
     match value:
         case 1:
-            return f"\033[31m{item}\033[0m"
+            return f"{Fore.RED}{item}{Style.RESET_ALL}"
         case 2:
-            return f"\033[32m{item}\033[0m"
+            return f"{Fore.GREEN}{item}{Style.RESET_ALL}"
         case 3:
-            return f"\033[33m{item}\033[0m"
+            return f"{Fore.YELLOW}{item}{Style.RESET_ALL}"
         case 4:
-            return f"\033[34m{item}\033[0m"
+            return f"{Fore.BLUE}{item}{Style.RESET_ALL}"
         case 'D': # Debugging Purposes
             return " # "
         case _:
