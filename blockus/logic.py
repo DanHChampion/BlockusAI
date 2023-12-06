@@ -102,11 +102,11 @@ def place_piece(board, colour, move):
                 board[row+cell[0]][col + cell[1]] = colour
     return board
 
-def get_results(players_list, players_pieces):
+def get_results(players_list):
     results = []
     for player in players_list:
         total = 0
-        for piece in players_pieces[player.colour-1]:
+        for piece in player.remaining_pieces:
             total += piece.value
         results.append([player.name, player.colour, total])
 

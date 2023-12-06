@@ -61,7 +61,6 @@ def _results(data):
     max_length = len(max([player_data[0] for player_data in data], key=len))
     if max_length < 6: max_length = 6
 
-    print("Results:")
     print("+=========="+"="*max_length+"+")
     print("| Player "+" "*(max_length-6)+"| Score |")
     print("+=========="+"="*max_length+"+")
@@ -69,6 +68,6 @@ def _results(data):
         score = player_data[2]
         if score < 10:
             score = str(score)+ " "
-        row = f"| {render_cell(int(player_data[1]),player_data[0])} "+" "*(max_length-len(player_data[0]))+f"| {score}    |"
+        row = f"| {render_cell(int(player_data[1]), player_data[0])} "+" "*(max_length-len(player_data[0]))+f"| {score}    |"
         print(row)
         print("+=========="+"="*max_length+"+")

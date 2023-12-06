@@ -18,7 +18,10 @@ class Player:
                     raise ValueError(colour, "is not a colour")
         
         self.ai = AI(ai)
+        self.ai_version = ai
         self.finished = False
+        self.remaining_pieces = []
+        self.selected_piece_index = 12
 
     def __str__(self):
         return self.name

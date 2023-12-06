@@ -23,6 +23,7 @@ class Manager:
         # Initialise Game
         self.round = 0
         self.turn = 0
+        self.timer = 0
         # Check if input values are correct
         
         # If AI versions aren't specified
@@ -32,8 +33,8 @@ class Manager:
         self.ai_versions = ai_versions
 
         # Players
-        if not (2 <= no_of_players <= 4):
-            raise ValueError("Must be 2-4 players")
+        if not (no_of_players == 2 or no_of_players == 4):
+            raise ValueError("Must be 2 or 4 players")
         self.no_of_players = no_of_players
         self.player_list = [Player(player, self.ai_versions[player-1]) for player in range(1,no_of_players+1)]
 
@@ -43,16 +44,16 @@ class Manager:
 
         # Generate Pieces for players
         self.player_pieces = []
-        for player in range(1,no_of_players+1):
-            self.player_pieces.append([Piece(piece_type,player) for piece_type in available_pieces_types])
+        for player in self.player_list:
+            player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in available_pieces_types]
         
 
     def start_game(self):
-        print(f"Starting Game with {self.no_of_players} players...")
+        print(f"Starting game with {self.no_of_players} players...")
         flag = True
         # Game Loop
         print("Playing...")
-        timer = time.time()
+        self.timer = time.time()
         while(flag):
             self.round += 1
             self.output_text(f"Round: {self.round}")
@@ -64,13 +65,12 @@ class Manager:
                 draw._board(self.board)
                 input("")
             if self.round == MAX_ROUNDS: break
-        timer = format(time.time()-timer,".2f")
-        print(f"Game finished after {timer}s") # Print how long game took
+        self.timer = format(time.time()-self.timer,".2f")
         self.end_game()
 
     def end_game(self):
-        print("Showing results...")
-
+        print("\nShowing results...")
+        print(f"Game finished after {self.timer}s") # Print how long game took
         print(f"Played a total of {self.round} rounds")
 
         if DRAW_RESULTS:
@@ -78,12 +78,12 @@ class Manager:
             draw._board(self.board)
             # Show Remaining Pieces
             self.output_text("\nRemaining Pieces:")
-            for pieces in self.player_pieces:
-                pieces_list = [_.piece for _ in pieces]
+            for player in self.player_list:
+                pieces_list = [_.piece for _ in player.remaining_pieces]
                 draw._pieces_in_row(pieces_list)
 
         # Show Results
-        results = logic.get_results(self.player_list, self.player_pieces)
+        results = logic.get_results(self.player_list)
         draw._results(results)
         
 
@@ -97,7 +97,7 @@ class Manager:
             return False
 
         # If no pieces left -> End Turn
-        available_pieces = self.player_pieces[player.colour-1]
+        available_pieces = player.remaining_pieces
         if len(available_pieces) == 0:
             player.finished = True
             self.output_text(f"{player_string} has no more pieces...")
@@ -151,7 +151,7 @@ class Manager:
             draw._piece(final_move[0])
 
         # Remove piece from available pieces
-        self.player_pieces[player.colour-1].remove(final_move[2])
+        player.remaining_pieces.remove(final_move[2])
 
         # Place piece
         self.board = logic.place_piece(self.board, player.colour, final_move)

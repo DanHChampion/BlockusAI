@@ -14,8 +14,6 @@ class AI():
                 return v2_greedy.generate_move(legal_moves, board, round)
             case "v3":
                 return v3_evalutator.generate_move(legal_moves, board, round)
-            case "hu":
-                return
             case _:
                 raise ValueError(self.version, "is not a existing version")
 
