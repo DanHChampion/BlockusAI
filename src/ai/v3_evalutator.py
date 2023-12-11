@@ -1,8 +1,7 @@
-import random
 import math
 import copy
 
-from .. import logic
+from ..helpers import logic
 from . import v2_greedy
 
 # Parameters

@@ -1,4 +1,4 @@
-from .ai.ai import AI
+from ..ai.ai import AI
 
 class Player:
     def __init__(self, colour, ai = "v1", name = None):

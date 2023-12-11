@@ -2,9 +2,9 @@
 import time
 
 from .configurations.config import configuration
-from . import logic
+from .helpers import logic
 from .helpers.piece import Piece
-from .player import Player
+from .helpers.player import Player
 from .helpers import draw
 
 VERBOSITY = configuration.VERBOSITY
