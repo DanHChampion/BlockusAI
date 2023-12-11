@@ -4,7 +4,8 @@ import json
 
 
 from src.manager import Manager
-from src.pygame import main
+from src.pygame import main as pygame_main
+from src.web import main as web_main
 
 from src.configurations.config import configuration
 
@@ -27,9 +28,11 @@ manager = Manager(no_of_players, ai_versions=AI_VERSIONS, available_pieces_types
 
 # Display GUI?
 try:
-    gui = args[2]
-    if gui == "GUI":
-        main.run(manager)
+    phase = args[2]
+    if phase == "GUI":
+        pygame_main.run(manager)
+    elif phase == "WEB":
+        web_main.run()
 except IndexError:
     manager.start_game()
 
