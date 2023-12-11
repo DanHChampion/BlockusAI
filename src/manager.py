@@ -1,22 +1,17 @@
 # Import
 import time
-import os
-from dotenv import load_dotenv
-from pathlib import Path
 
-dotenv_path = Path('configurations/.env')
-load_dotenv(dotenv_path=dotenv_path)
-
+from .configurations.config import configuration
 from . import logic
 from .helpers.piece import Piece
 from .player import Player
 from .helpers import draw
 
-VERBOSITY = os.environ.get("VERBOSITY").lower() in ('true', '1', 't')
-DRAW = os.environ.get("DRAW").lower() in ('true', '1', 't')
-DRAW_RESULTS = os.environ.get("DRAW_RESULTS").lower() in ('true', '1', 't')
-STEP_BY_STEP = os.environ.get("STEP_BY_STEP").lower() in ('true', '1', 't')
-MAX_ROUNDS = int(os.environ.get("MAX_ROUNDS"))
+VERBOSITY = configuration.VERBOSITY
+DRAW = configuration.DRAW
+DRAW_RESULTS = configuration.DRAW_RESULTS
+STEP_BY_STEP = configuration.STEP_BY_STEP
+MAX_ROUNDS = configuration.MAX_ROUNDS
 
 class Manager:
     def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None):
@@ -81,7 +76,7 @@ class Manager:
                 draw._pieces_in_row(pieces_list)
 
         # Show Results
-        results = logic.get_results(self.player_list)
+        results = logic.calc_results(self.player_list)
         draw._results(results)
         
 
@@ -156,5 +151,8 @@ class Manager:
     
     def output_text(self, text):
         if VERBOSITY: print(text)
+
+    def get_results(self):
+        return logic.calc_results(self.player_list)
 
 

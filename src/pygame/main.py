@@ -1,19 +1,15 @@
 import pygame
 import sys
-import time
 import os
-from dotenv import load_dotenv
-from pathlib import Path
 
+from ..configurations.config import configuration
 from . import render
 
-dotenv_path = Path('../configurations/.env')
-load_dotenv(dotenv_path=dotenv_path)
 
 WHITE = (255, 255, 255)
 
-CELL_SIZE = int(os.environ.get('CELL_SIZE'))
-FPS = int(os.environ.get('FPS'))
+CELL_SIZE = configuration.CELL_SIZE
+FPS = configuration.FPS
 
 def run(manager):
     # Initialize Pygame
@@ -28,7 +24,7 @@ def run(manager):
     NO_OF_PLAYERS = len(PLAYERS)
 
     # Create the Pygame screen
-    ICON = pygame.image.load("./blockus/pygame/icon.png")
+    ICON = pygame.image.load("./src/pygame/icon.png")
     pygame.display.set_icon(ICON)
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE) # Improve performance
     # SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME) # Hide Top bar

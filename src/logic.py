@@ -1,6 +1,4 @@
-from operator import itemgetter
 import copy
-
 
 def is_cell_within_bounds(board, cell): # cell = [row,col]
     rows = cols = len(board)
@@ -102,7 +100,7 @@ def place_piece(board, colour, move):
                 board[row+cell[0]][col + cell[1]] = colour
     return board
 
-def get_results(players_list):
+def calc_results(players_list):
     results = []
     for player in players_list:
         total = 0
@@ -111,4 +109,4 @@ def get_results(players_list):
         results.append([player.name, player.colour, total])
 
     # Sort 
-    return sorted(results, key=itemgetter(2))
+    return results

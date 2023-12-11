@@ -1,10 +1,7 @@
 import pygame
 import os
-from dotenv import load_dotenv
-from pathlib import Path
 
-dotenv_path = Path('../configurations/.env')
-load_dotenv(dotenv_path=dotenv_path)
+from ..configurations.config import configuration
 
 # Colours
 RED = (202, 52, 56)
@@ -18,7 +15,7 @@ PURPLE = (128, 0, 128)
 
 COLOUR_MAP = {0: WHITE, 1: RED, 2: GREEN, 3: YELLOW, 4: BLUE}
 
-CELL_SIZE = int(os.environ.get('CELL_SIZE'))
+CELL_SIZE = configuration.CELL_SIZE
 
 def render_board(screen, data, center):
     border_thickness = CELL_SIZE//8

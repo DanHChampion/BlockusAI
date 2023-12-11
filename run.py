@@ -1,24 +1,27 @@
 # Import
 import sys
-import os
 import json
-from pathlib import Path
-from dotenv import load_dotenv
 
-dotenv_path = Path('blockus/configurations/.env')
-load_dotenv(dotenv_path=dotenv_path)
 
-from blockus.manager import Manager
-from blockus.pygame import main
+from src.manager import Manager
+from src.pygame import main
+
+from src.configurations.config import configuration
+
+
+# print(Config)
 
 # Intialisation
 args = sys.argv
 
 # How many players
 no_of_players = int(args[1]) # Min = 2, Max = 4
-AI_VERSIONS = json.loads(os.environ.get("AI_LIST"))
-ALL_PIECES = json.loads(os.environ.get("ALL_PIECES"))
-
+if not (no_of_players == 2 or no_of_players == 4):
+    raise ValueError("Must be 2 or 4 players")
+AI_VERSIONS = json.loads(configuration.AI_LIST)
+if (len(AI_VERSIONS) != no_of_players):
+    raise ValueError(f"AI_LIST should include {no_of_players} values")
+ALL_PIECES = json.loads(configuration.ALL_PIECES)
 
 manager = Manager(no_of_players, ai_versions=AI_VERSIONS, available_pieces_types=ALL_PIECES)
 

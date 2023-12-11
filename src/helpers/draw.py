@@ -1,4 +1,5 @@
 import math
+from operator import itemgetter
 from colorama import init, Fore, Style
 
 # Initialize colorama (Windows only)
@@ -60,7 +61,7 @@ def _board(data):
         print(string +"|")
 
 def _results(data):
-    
+    data = sorted(data, key=itemgetter(2))
     # Get max length of Player's names
     max_length = len(max([player_data[0] for player_data in data], key=len))
     if max_length < 6: max_length = 6
