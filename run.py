@@ -1,6 +1,7 @@
 # Import
 import sys
 import json
+import argparse
 
 
 from src.manager import Manager
@@ -13,10 +14,18 @@ from src.configurations.config import configuration
 # print(Config)
 
 # Intialisation
-args = sys.argv
+parser = argparse.ArgumentParser(
+                    prog='Blockus',
+                    description='Blockus AI',
+                    epilog='Text at the bottom of help')
+
+parser.add_argument('--phase')
+parser.add_argument('--players')
+
+args = parser.parse_args()
 
 # How many players
-no_of_players = int(args[1]) # Min = 2, Max = 4
+no_of_players = int(args.players) # Min = 2, Max = 4
 if not (no_of_players == 2 or no_of_players == 4):
     raise ValueError("Must be 2 or 4 players")
 AI_VERSIONS = json.loads(configuration.AI_LIST)
@@ -26,15 +35,16 @@ ALL_PIECES = json.loads(configuration.ALL_PIECES)
 
 manager = Manager(no_of_players, ai_versions=AI_VERSIONS, available_pieces_types=ALL_PIECES)
 
-# Display GUI?
-try:
-    phase = args[2]
-    if phase == "GUI":
+match args.phase:
+    case "CLI":
+        manager.start_game()
+    case "GUI":
         pygame_main.run(manager)
-    elif phase == "WEB":
+    case "WEB":
         web_main.run()
-except IndexError:
-    manager.start_game()
+    case _:
+        raise RuntimeError("Invalid Phase")
+
 
 
 
