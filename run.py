@@ -6,7 +6,7 @@ import argparse
 
 from src.manager import Manager
 from src.pygame import main as pygame_main
-from src.web import main as web_main
+from src.web import app as web_app
 
 from src.configurations.config import configuration
 
@@ -41,7 +41,7 @@ match args.phase:
     case "GUI":
         pygame_main.run(manager)
     case "WEB":
-        web_main.run()
+        web_app.run()
     case _:
         raise RuntimeError("Invalid Phase")
 

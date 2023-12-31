@@ -1,10 +1,28 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+}
+
 .content {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    width: 100%;
+    height: 100%;
 }
 
 .home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.create {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,14 +41,11 @@
 }
 
 .message-box {
-    border-color: black;
-    border-width: 2px;
-    border-style: solid;
     background-color: whitesmoke;
-    height: 80vh;
+    height: 95vh;
     display: flex;
     flex-direction: column;
-    width: 80vw;
+    width: 20vw;
     align-items: stretch;
 }
 
@@ -63,10 +78,35 @@ h2 {
 }
 
 .muted {
-    font-size: 10px;
+    font-size: 8px;
     color: darkgray;
+    text-align: right;
 }
 
 li{
     color: red;
 }
+
+.room{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#game{
+    position: relative;
+    background-color: whitesmoke;
+    height: 95vh;
+    display: flex;
+    width: 75vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+/* canvas{
+    width: 100%;
+    height: 100%;
+} */

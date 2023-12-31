@@ -133,7 +133,6 @@ class Manager:
             return False
         
         # Get Move
-        
         final_move = player.generate_move(legal_moves, self.board, self.round)
        
         self.output_text(f"{player_string} placed {final_move[2]} at {final_move[1]}")

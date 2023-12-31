@@ -42,6 +42,9 @@ def home():
 
         session["room"] = room
         session["name"] = name
+    
+        if create != False:
+            return redirect(url_for("create"))
         return redirect(url_for("room"))
 
     return render_template("home.html")
@@ -52,6 +55,17 @@ def room():
     if room is None or session.get("name") is None or room not in rooms:
         return redirect(url_for("home"))
     return render_template("room.html")
+
+@app.route("/create", methods=["POST", "GET"])
+def create():
+    if request.method == "POST":
+        back = request.form.get("back", False)
+        if back != False:
+            return redirect(url_for("home"))
+
+        return redirect(url_for("room"))
+    return render_template("create.html")
+
 
 @socketio.on("message")
 def message(data):

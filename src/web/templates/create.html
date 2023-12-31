@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form class="create" method="post">
+    <h3>Create Room</h3>
+    <div>
+        <label>Number of Players:</label>
+        <select name="numOfPlayers">
+            <option>2</option>
+            <option>4</option>
+        </select>
+
+    </div>
+
+    <button class="create-button" type="submit" name="create">Create Room</button>
+    <button class="create-button" type="submit" name="back">Back</button>
+    {% if error%}
+    <ul>
+        <li>{{error}}</li>
+    </ul>
+    {% endif %}
+</form>
+
+{% endblock %}

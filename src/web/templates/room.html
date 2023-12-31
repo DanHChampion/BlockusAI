@@ -1,20 +1,33 @@
 {% extends 'base.html' %} {% block content %}
-<div class="message-box">
-  <h2>Chat Room: {{code}}</h2>
-  <div class="messages" id="messages"></div>
-  <div class="inputs">
-    <input
-      type="text"
-      rows="3"
-      placeholder="Message"
-      name="message"
-      id="message"
-    />
-    <button type="button" name="send" id="send-btn" onClick="sendMessage()">
-      Send
-    </button>
+<div class="room">
+  <div id="game">
+    <canvas id="blockus-canvas"></canvas>
+    <div class="game-buttons">
+      <button>Flip</button>
+      <button>Rotate CW</button>
+      <button>Rotate ACW</button>
+      <button>Pass</button>
+      <button onclick="clearTest()">Clear</button>
+    </div>
+  </div>
+  <div class="message-box">
+    <h2>Chat Room: {{code}}</h2>
+    <div class="messages" id="messages"></div>
+    <div class="inputs">
+      <input
+        type="text"
+        rows="3"
+        placeholder="Message"
+        name="message"
+        id="message"
+      />
+      <button type="button" name="send" id="send-btn" onClick="sendMessage()">
+        Send
+      </button>
+    </div>
   </div>
 </div>
+<script src="{{url_for('static', filename='scripts/game.js')}}"></script>
 <script type="text/javascript">
   var socketio = io();
 

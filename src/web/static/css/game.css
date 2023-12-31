@@ -1,0 +1,23 @@
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow{
+    background-color: yellow;
+}
+.game-buttons{
+    position: absolute;
+    bottom: 160px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
