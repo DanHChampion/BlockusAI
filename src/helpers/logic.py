@@ -106,7 +106,7 @@ def calc_results(players_list):
         total = 0
         for piece in player.remaining_pieces:
             total += piece.value
-        results.append([player.name, player.colour, total])
+        results.append([player.name, player.colour, total, player.ai_version])
 
     # Sort 
     return results

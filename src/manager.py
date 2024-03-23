@@ -15,6 +15,9 @@ MAX_ROUNDS = configuration.MAX_ROUNDS
 
 class Manager:
     def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None):
+        self.intialise(no_of_players, available_pieces_types, ai_versions)
+        
+    def intialise(self, no_of_players, available_pieces_types, ai_versions):
         # Initialise Game
         self.round = 0
         self.turn = 0
@@ -38,10 +41,10 @@ class Manager:
         self.board = [[ 0 for x in range(0,self.board_size)] for y in range(0,self.board_size)]
 
         # Generate Pieces for players
+        self.available_pieces_types = available_pieces_types
         self.player_pieces = []
         for player in self.player_list:
             player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in available_pieces_types]
-        
 
     def start_game(self):
         print(f"Starting game with {self.no_of_players} players...")
@@ -76,7 +79,7 @@ class Manager:
                 draw._pieces_in_row(pieces_list)
 
         # Show Results
-        results = logic.calc_results(self.player_list)
+        results = self.get_results()
         draw._results(results)
         
 

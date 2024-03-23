@@ -7,13 +7,13 @@ class Player:
         if name is None:
             match colour:
                 case 1:
-                    self.name = "Apple"
+                    self.name = "Red"
                 case 2:
-                    self.name = "Lime"
+                    self.name = "Green"
                 case 3:
-                    self.name = "Banana"
+                    self.name = "Yellow"
                 case 4:
-                    self.name = "Blueberry"
+                    self.name = "Blue"
                 case _:
                     raise ValueError(colour, "is not a colour")
         
