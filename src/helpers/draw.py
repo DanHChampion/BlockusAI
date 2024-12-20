@@ -60,12 +60,6 @@ def _board(data):
             string += "|"+ render_cell(data[math.floor(row/2)][col], BIG_BLOCK)
         print(string +"|")
 
-from operator import itemgetter
-
-from operator import itemgetter
-
-from operator import itemgetter
-
 def _results(data):
     # Sort data by the score (item at index 2)
     data = sorted(data, key=itemgetter(2))
