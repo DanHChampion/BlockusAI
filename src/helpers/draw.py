@@ -60,19 +60,46 @@ def _board(data):
             string += "|"+ render_cell(data[math.floor(row/2)][col], BIG_BLOCK)
         print(string +"|")
 
-def _results(data):
-    data = sorted(data, key=itemgetter(2))
-    # Get max length of Player's names
-    max_length = len(max([player_data[0] for player_data in data], key=len))
-    if max_length < 6: max_length = 6
+from operator import itemgetter
 
-    print("+=========="+"="*max_length+"+")
-    print("| Player "+" "*(max_length-6)+"| Score |")
-    print("+=========="+"="*max_length+"+")
+from operator import itemgetter
+
+from operator import itemgetter
+
+def _results(data):
+    # Sort data by the score (item at index 2)
+    data = sorted(data, key=itemgetter(2))
+
+    # Get max length of Player's names
+    max_name_length = len(max([player_data[0] for player_data in data], key=len))
+    if max_name_length < 6:
+        max_name_length = 6
+
+    # Set fixed width for AI Version
+    max_version_length = 10  # "AI Version" header length
+
+    # Get max length of remaining pieces strings
+    max_remaining_pieces_length = max(len(", ".join([piece.type for piece in player_data[4]])) for player_data in data)
+
+    # Ensure a minimum width for remaining pieces
+    if max_remaining_pieces_length < 20:
+        max_remaining_pieces_length = 20
+
+    # Print table header
+    print("+==" + "=" * max_name_length + "+=======+=" + "=" * max_version_length + "=+" + "=" * (max_remaining_pieces_length + 2) + "+")
+    print(f"| Player{' ' * (max_name_length - 6)} | Score | AI Version | Remaining Pieces{' ' * (max_remaining_pieces_length - 16)} |")
+    print("+==" + "=" * max_name_length + "+=======+=" + "=" * max_version_length + "=+" + "=" * (max_remaining_pieces_length + 2) + "+")
+
+    # Print each player's data
     for player_data in data:
-        score = player_data[2]
-        if score < 10:
-            score = str(score)+ " "
-        row = f"| {render_cell(int(player_data[1]), player_data[0])} "+" "*(max_length-len(player_data[0]))+f"| {score}    |"
+        player_name = render_cell(int(player_data[1]), player_data[0])
+        score = str(player_data[2]).ljust(5)  # Ensure score is aligned
+        ai_version = player_data[3].ljust(max_version_length)
+        
+        # Extract piece types from remaining_pieces
+        remaining_pieces = ", ".join([piece.type for piece in player_data[4]])
+
+        # Format the row
+        row = f"| {player_name}{' ' * (max_name_length - len(player_data[0]))} | {score} | {ai_version} | {remaining_pieces.ljust(max_remaining_pieces_length)} |"
         print(row)
-        print("+=========="+"="*max_length+"+")
+        print("+==" + "=" * max_name_length + "+=======+=" + "=" * max_version_length + "=+" + "=" * (max_remaining_pieces_length + 2) + "+")

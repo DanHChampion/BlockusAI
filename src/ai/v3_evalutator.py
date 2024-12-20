@@ -11,7 +11,7 @@ CORNERS_FACTOR = 0.3
 def generate_move(legal_moves, board, round):
     # Pick move with highest value and allows players to move closer towards center
     
-    if round <= 5:
+    if round <= 6:
         fake_board = copy.deepcopy(board)
 
         highest_value_moves = [legal_moves[0]]
