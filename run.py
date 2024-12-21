@@ -2,7 +2,6 @@
 import json
 import argparse
 
-
 from src.manager import Manager
 from src.pygame import main as pygame_main
 from src.web import app as web_app

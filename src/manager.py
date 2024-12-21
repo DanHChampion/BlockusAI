@@ -135,7 +135,7 @@ class Manager:
             self.output_text(f"{player_string} has no legal moves...")
             return False
         
-        # Get Move
+        # Get Move - move = [orientation, cell, piece]
         final_move = player.generate_move(legal_moves, self.board, self.round)
        
         self.output_text(f"{player_string} placed {final_move[2]} at {final_move[1]}")
