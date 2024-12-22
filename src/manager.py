@@ -1,5 +1,6 @@
 # Import
 import time
+import random
 
 from .configurations.config import configuration
 from .helpers import logic
@@ -14,20 +15,18 @@ STEP_BY_STEP = configuration.STEP_BY_STEP
 MAX_ROUNDS = configuration.MAX_ROUNDS
 
 class Manager:
-    def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None):
-        self.intialise(no_of_players, available_pieces_types, ai_versions)
+    def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None, shuffle = False):
+        self.intialise(no_of_players, available_pieces_types, ai_versions, shuffle)
         
-    def intialise(self, no_of_players, available_pieces_types, ai_versions):
+    def intialise(self, no_of_players, available_pieces_types, ai_versions, shuffle):
         # Initialise Game
         self.round = 0
         self.turn = 0
-        self.start_time = time.time()
         # Check if input values are correct
         
         # If AI versions aren't specified
         if ai_versions is None:
-            self.ai_versions = ["v1" for player in range(1,no_of_players+1)]
-
+            ai_versions = ["v1" for _ in range(1,no_of_players+1)]
         self.ai_versions = ai_versions
 
         # Players
@@ -35,6 +34,9 @@ class Manager:
             raise ValueError("Must be 2 or 4 players")
         self.no_of_players = no_of_players
         self.player_list = [Player(player, self.ai_versions[player-1]) for player in range(1,no_of_players+1)]
+        
+        if shuffle:
+            random.shuffle(self.player_list)
 
         # Generate Board
         self.board_size = 3*no_of_players + 8
@@ -47,7 +49,11 @@ class Manager:
             player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in available_pieces_types]
 
     def start_game(self):
+        self.start_time = time.time()
         print(f"Starting game with {self.no_of_players} players...")
+        # Show Starting Board
+        results = self.get_results()
+        draw._results(results)
         flag = True
         # Game Loop
         while(flag):
