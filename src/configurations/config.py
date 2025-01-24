@@ -29,6 +29,10 @@ class AppConfig:
     CELL_SIZE: int = 20
     FPS: int = 60
 
+    # Experiment Configs
+    RECORD: bool = True
+    GAMES: int = 100
+
     def __init__(self, env):
         for field in self.__annotations__:
             # Field will be skipped if not in all caps

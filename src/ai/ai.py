@@ -2,6 +2,7 @@ from . import v1_random
 from . import v2_greedy
 from . import v3_evaluator
 from . import v4_chatgpt
+from . import v5_champion
 
 class AI():
     def __init__(self, version):
@@ -17,6 +18,8 @@ class AI():
                 return v3_evaluator.generate_move(legal_moves, board, round)
             case "v4":
                 return v4_chatgpt.generate_move(legal_moves, board, round)
+            case "v5":
+                return v5_champion.generate_move(legal_moves, board, round)
             case _:
                 raise ValueError(self.version, "is not a existing version")
 

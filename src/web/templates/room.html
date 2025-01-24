@@ -1,13 +1,14 @@
 {% extends 'base.html' %} {% block content %}
 <div class="room">
   <div id="game">
-    <div id="blockus-board"></div>
-    <div class="game-buttons">
+    <div id="board"></div>
+    <div class="controls">
       <button>Flip</button>
       <button>Rotate CW</button>
       <button>Rotate ACW</button>
       <button>Pass</button>
       <button onclick="clearTest()">Clear</button>
+      <button onclick="submitMove()">Submit</button>
     </div>
   </div>
   <div class="message-box">
@@ -57,6 +58,7 @@
     socketio.emit("message", { data: message.value });
     message.value = "";
   };
+
 </script>
 {% for msg in messages %}
 <script type="text/javascript">

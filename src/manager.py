@@ -1,6 +1,7 @@
 # Import
 import time
 import random
+import csv
 
 from .configurations.config import configuration
 from .helpers import logic
@@ -13,6 +14,7 @@ DRAW = configuration.DRAW
 DRAW_RESULTS = configuration.DRAW_RESULTS
 STEP_BY_STEP = configuration.STEP_BY_STEP
 MAX_ROUNDS = configuration.MAX_ROUNDS
+RECORD = configuration.RECORD
 
 class Manager:
     def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None, shuffle = False):
@@ -48,12 +50,11 @@ class Manager:
         for player in self.player_list:
             player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in available_pieces_types]
 
-    def start_game(self):
         self.start_time = time.time()
+
+
+    def start_game(self):
         print(f"Starting game with {self.no_of_players} players...")
-        # Show Starting Board
-        results = self.get_results()
-        draw._results(results)
         flag = True
         # Game Loop
         while(flag):
