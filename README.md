@@ -9,7 +9,7 @@ What is blockus?
 
 Rules?
 
-In three-player games, either one of the players takes two colors or else "the pieces of the fourth color are placed on the board in a non-strategic way."
+In three-player games, either one of the players takes two colours or else "the pieces of the fourth colour are placed on the board in a non-strategic way."
 
 where idea come from?
 

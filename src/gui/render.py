@@ -18,7 +18,7 @@ COLOUR_MAP = {0: WHITE, 1: RED, 2: GREEN, 3: YELLOW, 4: BLUE}
 CELL_SIZE = configuration.CELL_SIZE
 
 def render_board(screen, data, center):
-    border_thickness = CELL_SIZE//8
+    border_thickness = CELL_SIZE // 8
     board_size = len(data)
     middle = (board_size*CELL_SIZE)//2
     offset = [center[0] - middle, center[1] - middle]

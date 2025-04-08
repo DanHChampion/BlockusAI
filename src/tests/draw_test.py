@@ -51,7 +51,7 @@ def test_board_output(capfd):
     _board(data)
     captured = capfd.readouterr()
     assert "+---+---+" in captured.out  # Checking for the board's row delimiters
-    assert "███" in captured.out  # Checking for rendered colored cells
+    assert "███" in captured.out  # Checking for rendered coloured cells
     assert "|"+ " " * 3 in captured.out  # Ensures cell formatting
 
 # Test for _results function (capturing printed output)

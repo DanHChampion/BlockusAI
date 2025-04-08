@@ -3,8 +3,8 @@ import json
 import argparse
 
 from src.manager import Manager
-from src.pygame import main as pygame_main
-from src.web import app as web_app
+from src.gui import main as pygame_gui
+from src.game import main as pygame_main
 from src.experiment import experiment
 from src.ai.rl import training
 
@@ -43,9 +43,9 @@ match args.phase:
     case "CLI":
         manager.start_game()
     case "GUI":
-        pygame_main.run(manager)
-    case "WEB":
-        web_app.run()
+        pygame_gui.run(manager)
+    case "GAME":
+        pygame_main.main()
     case "EXP":
         experiment.run(manager)
     case "DQN":

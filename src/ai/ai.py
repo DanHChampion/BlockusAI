@@ -20,6 +20,8 @@ class AI():
                 return v4_chatgpt.generate_move(legal_moves, board, round)
             case "v5":
                 return v5_champion.generate_move(legal_moves, board, round)
+            case "hm":
+                return None
             case _:
                 raise ValueError(self.version, "is not a existing version")
 

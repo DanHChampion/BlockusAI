@@ -1,4 +1,5 @@
 import copy
+from .draw import _board
 
 def is_cell_within_bounds(board, cell): # cell = [row,col]
     rows = cols = len(board)
@@ -55,41 +56,43 @@ def find_legal_corners(board, colour):
 
 def find_legal_moves(board, legal_corners, available_pieces, colour):
     legal_moves = []
-    # Generate moves given legal corners
     for corner in legal_corners:
         for piece in available_pieces:
-            # Make move with piece and orientation
             orientations = piece.get_orientations()
-            cell = corner
-            # draw._pieces_in_row(orientations)
             for orientation in orientations:
-                # Translate the piece left then up
-                for row in range(len(orientation)):
-                    for col in range(len(orientation[row])):
-                        cell = [corner[0]-row, corner[1]- col]
-                        move = [orientation, cell, piece]
-                        if is_move_legal(board, move, colour, corner):
-                            legal_moves.append(move)
-
+                for row_offset in range(len(orientation)):
+                    for col_offset in range(len(orientation[row_offset])):
+                        if orientation[row_offset][col_offset]:  # Check if this cell of the piece is occupied
+                            cell = [corner[0] - row_offset, corner[1] - col_offset]
+                            move = [orientation, cell, piece]
+                            if is_move_legal(board, move, colour, legal_corners):
+                                legal_moves.append(move)
     return legal_moves
 
-def is_move_legal(board, move, colour, corner):
-    test_board = copy.deepcopy(board)
+def is_move_legal(board, move, colour, legal_corners):
+    # Check if the piece has at least one tile on a legal corner
     piece = move[0]
     cell = move[1]
+    legal = False
+
     for row in range(len(piece)):
         for col in range(len(piece[row])):
-            current_cell = [row+cell[0], col + cell[1]]
-            if piece[row][col]:
-                if (not is_cell_within_bounds(board, current_cell) or
-                    not is_cell_free(board, current_cell) or
-                    is_cell_adjacent_to_colour(board, current_cell, colour)):
+            if piece[row][col]:  # Check if this cell of the piece is occupied
+                current_cell = [cell[0] + row, cell[1] + col]
+
+                # Check if the cell is within bounds and free
+                if not is_cell_within_bounds(board, current_cell) or not is_cell_free(board, current_cell):
                     return False
-                test_board[current_cell[0]][current_cell[1]] = 'D'
-    
-    if test_board[corner[0]][corner[1]] == 0:
-        return False
-    return True
+
+                # Check if the cell is adjacent to the same colour
+                if is_cell_adjacent_to_colour(board, current_cell, colour):
+                    return False
+
+                # Check if the piece has at least one tile on a legal corner
+                if current_cell in legal_corners:
+                    legal = True
+
+    return legal
 
 def place_piece(board, colour, move):
     piece = move[0]

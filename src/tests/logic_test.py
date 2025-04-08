@@ -106,14 +106,14 @@ def test_is_move_legal():
         [0, 0],
         Piece("I1", 1)
     ]
-    assert is_move_legal(board, move, 1, [0, 0]) == True
+    assert is_move_legal(board, move, 1, [[0, 0]]) == True
     board[0][0] = 1
     move = [
         [[1, 0], [0, 1]],
         [0, 0],
         Piece("I2", 1)
     ]
-    assert is_move_legal(board, move, 1, [0, 0]) == False
+    assert is_move_legal(board, move, 1, [[0, 0]]) == False
 
 # Test place_piece
 def test_place_piece():

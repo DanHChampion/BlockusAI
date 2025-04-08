@@ -24,7 +24,7 @@ def run(manager):
     NO_OF_PLAYERS = len(PLAYERS)
 
     # Create the Pygame screen
-    ICON = pygame.image.load("./src/pygame/icon.png")
+    ICON = pygame.image.load("./src/gui/icon.png")
     pygame.display.set_icon(ICON)
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE) # Improve performance
     # SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME) # Hide Top bar
