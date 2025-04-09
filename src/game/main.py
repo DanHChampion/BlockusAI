@@ -1,7 +1,6 @@
 import pygame
-from .game import Game
+from .blockus import Blockus
 from .constants import *
-from .manager import PyGame_Manager
 
 def main():
     pygame.init()
@@ -10,7 +9,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.HWSURFACE)
     pygame.display.set_caption("Blokus")
     clock = pygame.time.Clock()
-    game = Game(screen, clock)
+    game = Blockus(screen, clock)
 
     running = True
     while running:

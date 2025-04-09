@@ -6,8 +6,6 @@ from ..configurations.config import configuration
 from . import render
 
 
-WHITE = (255, 255, 255)
-
 CELL_SIZE = configuration.CELL_SIZE
 FPS = configuration.FPS
 
@@ -22,11 +20,12 @@ def run(manager):
     CENTER = [WIDTH//2, HEIGHT//2] # cols, rows
     PLAYERS = manager.player_list
     NO_OF_PLAYERS = len(PLAYERS)
+    WHITE = (255, 255, 255)
 
     # Create the Pygame screen
     ICON = pygame.image.load("./src/gui/icon.png")
     pygame.display.set_icon(ICON)
-    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE) # Improve performance
+    SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE)
     pygame.display.set_caption("Blockus")
 
     # Clear the screen
@@ -49,10 +48,6 @@ def run(manager):
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    running = False
-
         grid = manager.board
         SCREEN.fill(WHITE)
 
@@ -60,7 +55,6 @@ def run(manager):
             manager.round = manager.turn // NO_OF_PLAYERS + 1
             if round != manager.round:
                 round = manager.round
-                print(f"Round: {round}")
                 end_game_check = 0
             player = PLAYERS[manager.turn % NO_OF_PLAYERS]
             end_game_check += 1

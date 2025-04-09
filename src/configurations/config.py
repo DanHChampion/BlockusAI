@@ -15,7 +15,6 @@ def _parse_bool(val):
 class AppConfig:
     # Global Configs
     AI_LIST: str
-    MAX_ROUNDS: int = -1
     PYGAME_HIDE_SUPPORT_PROMPT: int = 1
 
     # CLI Configs

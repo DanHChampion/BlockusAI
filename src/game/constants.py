@@ -1,7 +1,7 @@
 from ..configurations.config import configuration
 
 BOARD_SIZE = 20
-CELL_SIZE = 25
+CELL_SIZE = configuration.CELL_SIZE
 MARGIN = CELL_SIZE
 MARGIN_TOP = MARGIN + CELL_SIZE * 4
 SCREEN_WIDTH = (BOARD_SIZE * CELL_SIZE * 2) + (MARGIN * 2) - (CELL_SIZE * 4)

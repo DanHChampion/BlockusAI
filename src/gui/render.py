@@ -27,16 +27,15 @@ def render_board(screen, data, center):
     pygame.draw.rect(screen, GREY, (offset[0],  offset[1], (board_size*CELL_SIZE), (board_size*CELL_SIZE)))
 
     # Border
-    for i in range(4):
-        pygame.draw.rect(
-            screen, 
-            BLACK,
-            (-border_thickness + offset[0],
-            -border_thickness + offset[1],
-            (board_size*CELL_SIZE)+(border_thickness*2)-1,
-            (board_size*CELL_SIZE)+(border_thickness*2)-1),
-            border_thickness
-        )
+    pygame.draw.rect(
+        screen, 
+        BLACK,
+        (-border_thickness + offset[0],
+        -border_thickness + offset[1],
+        (board_size*CELL_SIZE)+(border_thickness*2)-1,
+        (board_size*CELL_SIZE)+(border_thickness*2)-1),
+        border_thickness
+    )
 
     for row in range(board_size):
         for col in range(board_size):

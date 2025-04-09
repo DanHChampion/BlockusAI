@@ -103,6 +103,19 @@ def place_piece(board, colour, move):
                 board[row+cell[0]][col + cell[1]] = colour
     return board
 
+def get_starting_corner(board_size, colour):
+    match colour:
+        case 1: # Red starts in top-left
+            return [[0,0]]
+        case 2: # Green starts in top-right
+            return [[0,board_size-1]]
+        case 3: # Yellow starts in bottom-right
+            return [[board_size-1,board_size-1]]
+        case 4: # Blue starts in bottom-left
+            return [[board_size-1,0]]
+        case _:
+            raise ValueError("Invalid Colour")
+
 def calc_results(players_list):
     results = []
     for player in players_list:

@@ -13,36 +13,36 @@ VERBOSITY = configuration.VERBOSITY
 DRAW = configuration.DRAW
 DRAW_RESULTS = configuration.DRAW_RESULTS
 STEP_BY_STEP = configuration.STEP_BY_STEP
-MAX_ROUNDS = configuration.MAX_ROUNDS
 RECORD = configuration.RECORD
 
 class Manager:
-    def __init__(self, no_of_players, available_pieces_types = None, ai_versions = None, shuffle = False):
-        self.intialise(no_of_players, available_pieces_types, ai_versions, shuffle)
+    def __init__(self, ai_versions, available_pieces_types = None, shuffle = False):
+        self.intialise(available_pieces_types, ai_versions, shuffle)
         
-    def intialise(self, no_of_players, available_pieces_types, ai_versions, shuffle):
+    def intialise(self, available_pieces_types, ai_versions, shuffle):
         # Initialise Game
         self.round = 0
         self.turn = 0
         # Check if input values are correct
         
-        # If AI versions aren't specified
-        if ai_versions is None:
-            ai_versions = ["v1" for _ in range(1,no_of_players+1)]
-        self.ai_versions = ai_versions
-
         # Players
-        if not (no_of_players == 2 or no_of_players == 4):
-            raise ValueError("Must be 2 or 4 players")
-        self.no_of_players = no_of_players
-        self.player_list = [Player(player, self.ai_versions[player-1]) for player in range(1,no_of_players+1)]
+        self.no_of_players = 4
+
+        # Validate AI versions
+        self.ai_versions = ai_versions
+        if len(self.ai_versions) != self.no_of_players:
+            raise ValueError(f"Expected {self.no_of_players} AI versions, but got {len(self.ai_versions)}.")
+        if any(ai_version == "hm" for ai_version in self.ai_versions):
+            raise ValueError("Invalid AI version: 'hm' is only allowed for GAME phase.")
+        
+        self.player_list = [Player(player, self.ai_versions[player-1]) for player in range(1,self.no_of_players+1)]
         
         if shuffle:
-            shift = random.randint(1, 4)
+            shift = random.randint(1, self.no_of_players)
             self.player_list = self.player_list[shift:] + self.player_list[:shift]
 
         # Generate Board
-        self.board_size = 3*no_of_players + 8
+        self.board_size = 20
         self.board = [[ 0 for x in range(0,self.board_size)] for y in range(0,self.board_size)]
 
         # Generate Pieces for players
@@ -55,7 +55,7 @@ class Manager:
 
 
     def start_game(self):
-        print(f"Starting game with {self.no_of_players} players...")
+        print(f"Starting game...")
         flag = True
         # Game Loop
         while(flag):
@@ -68,13 +68,12 @@ class Manager:
             if STEP_BY_STEP: 
                 draw._board(self.board)
                 input("")
-            if self.round == MAX_ROUNDS: break
         self.end_game()
 
     def end_game(self):
         runtime = format(time.time()-self.start_time,".2f")
         print("Showing results...")
-        print(f"Game finished after {runtime}s") # Print how long game took
+        print(f"Game finished after {runtime}s")
         print(f"Played a total of {self.round} rounds")
 
         if DRAW_RESULTS:
@@ -113,20 +112,7 @@ class Manager:
 
         if self.round == 1:
             # Get starting squares
-            match player.colour:
-                case 1: # Red starts in top-left
-                    legal_corners = [[0,0]]
-                case 2: # Green starts in bottom-left but bottom-right if there are only 2 players
-                    if self.no_of_players != 2:
-                        legal_corners = [[self.board_size-1,0]]
-                    else:
-                        legal_corners = [[self.board_size-1,self.board_size-1]]
-                case 3: # Yellow starts in bottom-right
-                    legal_corners = [[self.board_size-1,self.board_size-1]]
-                case 4: # Blue starts in top-right
-                    legal_corners = [[0,self.board_size-1]]
-                case _:
-                    raise ValueError("Invalid Colour")
+            legal_corners = logic.get_starting_corner(self.board_size, player.colour)
         else:
             # If no corners to place piece -> End Turn
             legal_corners = logic.find_legal_corners(self.board, player.colour)
@@ -143,7 +129,7 @@ class Manager:
             self.output_text(f"{player_string} has no legal moves...")
             return False
         
-        # Get Move - move = [orientation, cell, piece]
+        # Get Move -> move = [orientation, cell, piece]
         final_move = player.generate_move(legal_moves, self.board, self.round)
        
         self.output_text(f"{player_string} placed {final_move[2]} at {final_move[1]}")

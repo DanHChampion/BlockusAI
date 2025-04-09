@@ -16,25 +16,16 @@ parser = argparse.ArgumentParser(
                     description='Blockus AI')
 
 parser.add_argument('--phase')
-parser.add_argument('--players', required=False, default=4)
 parser.add_argument('--shuffle', required=False, default=False)
 
 args = parser.parse_args()
 
-# How many players
-no_of_players = int(args.players) # Min = 2, Max = 4
-if not (no_of_players == 2 or no_of_players == 4):
-    raise ValueError("Must be 2 or 4 players")
 AI_VERSIONS = json.loads(configuration.AI_LIST)
-if (len(AI_VERSIONS) < no_of_players):
-    raise ValueError(f"AI_LIST should include at least {no_of_players} values. Please update your .env file")
-ai_versions = AI_VERSIONS[:no_of_players]
 ALL_PIECES = json.loads(configuration.ALL_PIECES)
 SHUFFLE = bool(args.shuffle)
 
 manager = Manager(
-    no_of_players,
-    ai_versions=ai_versions,
+    ai_versions=AI_VERSIONS,
     available_pieces_types=ALL_PIECES,
     shuffle=SHUFFLE
 )

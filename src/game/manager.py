@@ -8,23 +8,26 @@ from ..helpers import logic
 from .piece import PyGame_Piece
 from .board import PyGame_Board
 from ..helpers.player import Player
+from ..helpers import draw
 import json
 
+
 class PyGame_Manager():
-    def __init__(self, no_of_players):
-        self.intialise(no_of_players)
+    def __init__(self):
+        self.intialise()
         self.running = True
 
-    def intialise(self, no_of_players):
+    def intialise(self):
         self.round = 0
         self.turn = 0
+
+        self.no_of_players = 4
         
-        ai_versions = ["hm"] + ["v4" for _ in range(1, no_of_players)]
+        ai_versions = ["hm"] + ["v4" for _ in range(1, self.no_of_players)]
         print("AI versions: ", ai_versions)
         self.ai_versions = ai_versions
 
-        self.no_of_players = no_of_players
-        self.player_list = [Player(player, self.ai_versions[player - 1]) for player in range(1, no_of_players + 1)]
+        self.player_list = [Player(player, self.ai_versions[player - 1]) for player in range(1, self.no_of_players + 1)]
 
         # Randomise Order
         shift = random.randint(1, 4)
@@ -44,7 +47,6 @@ class PyGame_Manager():
                 break
 
         self.start_time = time.time()
-
         self.running = True
         self.current_player = self.player_list[0]
         self.start_game()
@@ -60,97 +62,63 @@ class PyGame_Manager():
         print(f"Played a total of {self.round} rounds")
 
     def player_turn(self):
-        print(f"Turn: {self.turn} - Player: {self.current_player.name}")
-        # Redraw the game window
         pygame.display.update()
-        self.current_player = self.player_list[(self.turn % self.no_of_players)]
-        print(f"Turn: {self.turn} - Player: {self.current_player.name}")
+        self.current_player = self.player_list[self.turn % self.no_of_players]
         if self.turn % self.no_of_players == 0:
             self.round += 1
         self.turn += 1
-        print(f"Round: {self.round} Turn: {self.turn} - Player: {self.current_player.name}")
+
+        self.player_string = draw.render_cell(self.current_player.colour, str(self.current_player))
+
+        print(f"Round: {self.round} | Turn: {self.turn} | Player: {self.player_string}")
+
         if all(player.finished for player in self.player_list):
             self.end_game()
             return
+
         if self.current_player.finished:
             self.player_turn()
             return
+
         if self.current_player.ai_version == "hm":
-            # Human player
-            print(f"Human {self.current_player.name} is playing...")
-            # check if player has any legal moves
-            available_pieces = self.current_player.remaining_pieces.copy()
-            if self.round == 1:
-                match self.current_player.colour:
-                    case 1: # Red starts in top-left
-                        legal_corners = [[0,0]]
-                    case 2: # Green starts in bottom-left but bottom-right if there are only 2 players
-                        if self.no_of_players != 2:
-                            legal_corners = [[self.board_size-1,0]]
-                        else:
-                            legal_corners = [[self.board_size-1,self.board_size-1]]
-                    case 3: # Yellow starts in bottom-right
-                        legal_corners = [[self.board_size-1,self.board_size-1]]
-                    case 4: # Blue starts in top-right
-                        legal_corners = [[0,self.board_size-1]]
-                    case _:
-                        raise ValueError("Invalid Colour")
-            else:
-                legal_corners = logic.find_legal_corners(self.board.grid, self.current_player.colour)
-
-            print(f"Legal Corners: {len(legal_corners)}")
-            legal_moves = logic.find_legal_moves(self.board.grid, legal_corners, available_pieces, self.current_player.colour)
-            print(f"Legal Moves: {len(legal_moves)}")
-            # If no legal moves -> End Turn
-            if len(legal_moves) == 0 and self.round != 1:
-                self.current_player.finished = True
-                print(f"{self.current_player.name} has no legal moves...")
-                self.player_turn()
-                return
+            self.handle_human_turn()
         else:
-            # AI player
-            print(f"AI {self.current_player.name} is thinking...")
-            available_pieces = self.current_player.remaining_pieces.copy()
+            self.handle_ai_turn()
 
-            if self.round == 1:
-            # Get starting squares
-                match self.current_player.colour:
-                    case 1: # Red starts in top-left
-                        legal_corners = [[0,0]]
-                    case 2: # Green starts in bottom-left but bottom-right if there are only 2 players
-                        if self.no_of_players != 2:
-                            legal_corners = [[self.board_size-1,0]]
-                        else:
-                            legal_corners = [[self.board_size-1,self.board_size-1]]
-                    case 3: # Yellow starts in bottom-right
-                        legal_corners = [[self.board_size-1,self.board_size-1]]
-                    case 4: # Blue starts in top-right
-                        legal_corners = [[0,self.board_size-1]]
-                    case _:
-                        raise ValueError("Invalid Colour")
-                    
-            else:
-                legal_corners = logic.find_legal_corners(self.board.grid, self.current_player.colour)
+    def handle_human_turn(self):
+        print(f"Human {self.player_string} is playing...")
+        available_pieces = self.current_player.remaining_pieces.copy()
 
+        legal_corners = self.get_legal_corners()
+        legal_moves = logic.find_legal_moves(self.board.grid, legal_corners, available_pieces, self.current_player.colour)
 
-            legal_moves = logic.find_legal_moves(self.board.grid, legal_corners, available_pieces, self.current_player.colour)
-            # If no legal moves -> End Turn
-            if len(legal_moves) != 0:
-                print("AI found legal moves")
-                # Get Move - move = [orientation, cell, piece]
-                final_move = self.current_player.generate_move(legal_moves, self.board.grid, self.round) 
+        if len(legal_moves) == 0 and self.round != 1:
+            self.current_player.finished = True
+            print(f"{self.player_string} has no legal moves...")
+            self.player_turn()
 
-                # Remove piece from available pieces
-                self.current_player.remaining_pieces.remove(final_move[2])
+    def handle_ai_turn(self):
+        print(f"AI {self.player_string} is thinking...")
+        available_pieces = self.current_player.remaining_pieces.copy()
 
-                # Place piece
-                self.board.grid = logic.place_piece(self.board.grid, self.current_player.colour, final_move)
+        legal_corners = self.get_legal_corners()
+        legal_moves = logic.find_legal_moves(self.board.grid, legal_corners, available_pieces, self.current_player.colour)
 
-                self.player_turn()
-            else:
-                self.current_player.finished = True
-                print(f"{self.current_player.name} has no legal moves...")
-                self.player_turn()
+        if legal_moves:
+            final_move = self.current_player.generate_move(legal_moves, self.board.grid, self.round)
+
+            self.current_player.remaining_pieces.remove(final_move[2])
+            self.board.grid = logic.place_piece(self.board.grid, self.current_player.colour, final_move)
+        else:
+            self.current_player.finished = True
+            print(f"{self.player_string} has no legal moves...")
+
+        self.player_turn()
+
+    def get_legal_corners(self):
+        if self.round == 1:
+            return logic.get_starting_corner(self.board_size, self.current_player.colour)
+        return logic.find_legal_corners(self.board.grid, self.current_player.colour)
 
             
         

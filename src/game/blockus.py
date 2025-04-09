@@ -1,14 +1,16 @@
 import pygame
 import os
+from .piece import PyGame_Piece
 from .constants import *
+from .manager import PyGame_Manager
 from ..helpers.logic import find_legal_corners, is_move_legal, place_piece
 
-
-class UI:
-    def __init__(self, screen, manager, clock):
+class Blockus:
+    def __init__(self, screen, clock):
         self.screen = screen
+        self.clock = clock
+        self.manager = PyGame_Manager()
         self.selected = None
-        self.manager = manager
         self.pieces = self.manager.player_list[self.manager.hm_player_index].remaining_pieces
 
         self.clock = clock
@@ -18,11 +20,18 @@ class UI:
 
         self.restart_rect = pygame.Rect(SCREEN_WIDTH - (4 * CELL_SIZE) - MARGIN, MARGIN, (4 * CELL_SIZE), (1.3 * CELL_SIZE))
 
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            self.handle_event(event)
+        return True
+
     def handle_event(self, event):
-        # check if turn is humans turn
+        # Check if turn is humans turn
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.restart_rect.collidepoint(event.pos):
-                    self.manager.intialise(self.manager.no_of_players)
+                    self.manager.intialise()
                     self.pieces = self.manager.player_list[self.manager.hm_player_index].remaining_pieces
         if self.manager.current_player.ai_version == "hm":
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -42,7 +51,7 @@ class UI:
                         self.manager.board.grid = place_piece(self.manager.board.grid, self.selected.colour, move)
                         self.pieces.remove(self.selected)
                         self.screen.fill(BACKGROUND_COLOUR)
-                        self.draw(self.screen)
+                        self.draw()
                         self.manager.player_turn()
                     self.selected = None
 
@@ -54,7 +63,7 @@ class UI:
                         self.selected.flip()
 
     def update(self):
-        # Check if the selected piece is being dragged
+        # Selected piece is being dragged
         if self.selected:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_SIZEALL)
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -63,7 +72,7 @@ class UI:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             hovering = False
 
-            # Check if hovering over a piece
+            # Hovering over a piece
             for piece in self.pieces:
                 if any(pygame.Rect(piece.position[0] + dx * CELL_SIZE, piece.position[1] + dy * CELL_SIZE,
                                 CELL_SIZE, CELL_SIZE).collidepoint((mouse_x, mouse_y)) for dx, dy in piece.get_shape_offsets()):
@@ -71,65 +80,54 @@ class UI:
                     hovering = True
                     break
 
-            # Check if hovering over the restart button
+            # Hovering over the restart button
             if self.restart_rect.collidepoint((mouse_x, mouse_y)):
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
                 hovering = True
 
-            # Reset cursor if not hovering over anything
             if not hovering:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-    def draw(self, screen):
+    def draw(self):
         # Draw board
-        self.manager.board.draw(screen)
+        self.manager.board.draw(self.screen)
 
         # Draw all pieces
         for piece in self.pieces:
-            piece.draw(screen)
+            piece.draw(self.screen)
 
         # Draw pause button
-        pygame.draw.rect(screen, GRID_COLOUR, self.restart_rect)
-        pygame.draw.rect(screen, BORDER_COLOUR, self.restart_rect, BORDER_THICKNESS)
+        pygame.draw.rect(self.screen, GRID_COLOUR, self.restart_rect)
+        pygame.draw.rect(self.screen, BORDER_COLOUR, self.restart_rect, BORDER_THICKNESS)
         pause_text = self.font.render("Restart", True, BLACK)
-        screen.blit(pause_text, (self.restart_rect.x + CELL_SIZE // 2, self.restart_rect.y))
+        self.screen.blit(pause_text, (self.restart_rect.x + CELL_SIZE // 2, self.restart_rect.y))
 
         # Draw FPS counter
         fps_rect = pygame.Rect(SCREEN_WIDTH - (4 * CELL_SIZE) - MARGIN, MARGIN + (1.7 * CELL_SIZE), (4 * CELL_SIZE), (1.3 * CELL_SIZE))
-        pygame.draw.rect(screen, GRID_COLOUR, fps_rect)
-        pygame.draw.rect(screen, BORDER_COLOUR, fps_rect, BORDER_THICKNESS)
+        pygame.draw.rect(self.screen, GRID_COLOUR, fps_rect)
+        pygame.draw.rect(self.screen, BORDER_COLOUR, fps_rect, BORDER_THICKNESS)
         fps_text = self.font.render(f"FPS: {int(self.clock.get_fps())}", True, BLACK)
-        screen.blit(fps_text, (fps_rect.x + CELL_SIZE // 2, fps_rect.y))
-
-        # Define player rectangles based on the number of players
-        player_rects = []
-        if self.manager.no_of_players == 2:
-            player_rects = [
-                pygame.Rect(MARGIN, MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
-                pygame.Rect(MARGIN + (8 * CELL_SIZE), MARGIN, (5 * CELL_SIZE), (3 * CELL_SIZE))
-            ]
-        elif self.manager.no_of_players == 4:
-            player_rects = [
-                pygame.Rect(MARGIN, MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
-                pygame.Rect(MARGIN + (8 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
-                pygame.Rect(MARGIN + (16 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
-                pygame.Rect(MARGIN + (24 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE))
-            ]
-        else:
-            raise ValueError("Unsupported number of players. Only 2 or 4 players are supported.")
+        self.screen.blit(fps_text, (fps_rect.x + CELL_SIZE // 2, fps_rect.y))
 
         # Draw player rectangles and names
+        player_rects = [
+            pygame.Rect(MARGIN, MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
+            pygame.Rect(MARGIN + (8 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
+            pygame.Rect(MARGIN + (16 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE)),
+            pygame.Rect(MARGIN + (24 * CELL_SIZE), MARGIN, (7 * CELL_SIZE), (3 * CELL_SIZE))
+        ]
+
         for i, rect in enumerate(player_rects):
             player = self.manager.player_list[i]
-            pygame.draw.rect(screen, COLOUR_MAP[player.colour], rect)
-            pygame.draw.rect(screen, BORDER_COLOUR, rect, BORDER_THICKNESS)
+            pygame.draw.rect(self.screen, COLOUR_MAP[player.colour], rect)
+            pygame.draw.rect(self.screen, BORDER_COLOUR, rect, BORDER_THICKNESS)
 
             # Draw player details
             name_text = self.font.render(player.name, True, BLACK)
             ai_text = self.font.render(player.ai_version, True, BLACK)
             score_text = self.font.render(str(player.current_score()), True, BLACK)
 
-            screen.blit(name_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 0.4))
-            screen.blit(ai_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 1.4))
-            screen.blit(score_text, (rect.x + CELL_SIZE * 5, rect.y + CELL_SIZE * 0.8))
+            self.screen.blit(name_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 0.4))
+            self.screen.blit(ai_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 1.4))
+            self.screen.blit(score_text, (rect.x + CELL_SIZE * 5, rect.y + CELL_SIZE * 0.8))
         

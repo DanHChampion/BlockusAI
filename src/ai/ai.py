@@ -23,7 +23,7 @@ class AI():
             case "hm":
                 return None
             case _:
-                raise ValueError(self.version, "is not a existing version")
+                raise ValueError(f"'{self.version}' is not a valid version")
 
         
         
