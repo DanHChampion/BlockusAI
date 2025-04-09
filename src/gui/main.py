@@ -27,7 +27,6 @@ def run(manager):
     ICON = pygame.image.load("./src/gui/icon.png")
     pygame.display.set_icon(ICON)
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE) # Improve performance
-    # SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME) # Hide Top bar
     pygame.display.set_caption("Blockus")
 
     # Clear the screen

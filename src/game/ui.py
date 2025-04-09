@@ -1,10 +1,6 @@
 import pygame
 import os
 from .constants import *
-from ..configurations import config
-from .piece import PyGame_Piece
-import json
-from ..helpers import logic
 from ..helpers.logic import find_legal_corners, is_move_legal, place_piece
 
 
@@ -13,14 +9,12 @@ class UI:
         self.screen = screen
         self.selected = None
         self.manager = manager
-        self.pieces = self.manager.player_list[0].remaining_pieces
+        self.pieces = self.manager.player_list[self.manager.hm_player_index].remaining_pieces
 
         self.clock = clock
         
         font_path = os.path.join(os.path.dirname(__file__), "./font/Micro5-Regular.ttf")
-        self.font = pygame.font.Font(font_path, 24) # Normal font
-        self.st_font = pygame.font.Font(font_path, 24)
-        self.st_font.set_strikethrough(True) # Strikethrough font for player names
+        self.font = pygame.font.Font(font_path, round(CELL_SIZE * 1.2))  # Normal font
 
         self.restart_rect = pygame.Rect(SCREEN_WIDTH - (4 * CELL_SIZE) - MARGIN, MARGIN, (4 * CELL_SIZE), (1.3 * CELL_SIZE))
 
@@ -29,7 +23,7 @@ class UI:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.restart_rect.collidepoint(event.pos):
                     self.manager.intialise(self.manager.no_of_players)
-                    self.pieces = self.manager.player_list[0].remaining_pieces
+                    self.pieces = self.manager.player_list[self.manager.hm_player_index].remaining_pieces
         if self.manager.current_player.ai_version == "hm":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for piece in self.pieces:
@@ -60,6 +54,7 @@ class UI:
                         self.selected.flip()
 
     def update(self):
+        # Check if the selected piece is being dragged
         if self.selected:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_SIZEALL)
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -76,9 +71,8 @@ class UI:
                     hovering = True
                     break
 
-            # Check if hovering over buttons (Pause or FPS)
-            fps_rect = pygame.Rect(SCREEN_WIDTH - (4 * CELL_SIZE) - MARGIN, MARGIN + (2.5 * CELL_SIZE), (4 * CELL_SIZE), (1.5 * CELL_SIZE))
-            if self.restart_rect.collidepoint((mouse_x, mouse_y)) or fps_rect.collidepoint((mouse_x, mouse_y)):
+            # Check if hovering over the restart button
+            if self.restart_rect.collidepoint((mouse_x, mouse_y)):
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
                 hovering = True
 
@@ -87,14 +81,13 @@ class UI:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
     def draw(self, screen):
-        # Draw Board
+        # Draw board
         self.manager.board.draw(screen)
 
-        # Draw All Pieces
+        # Draw all pieces
         for piece in self.pieces:
             piece.draw(screen)
 
-    def draw_ui(self,screen):
         # Draw pause button
         pygame.draw.rect(screen, GRID_COLOUR, self.restart_rect)
         pygame.draw.rect(screen, BORDER_COLOUR, self.restart_rect, BORDER_THICKNESS)
@@ -129,18 +122,14 @@ class UI:
         for i, rect in enumerate(player_rects):
             player = self.manager.player_list[i]
             pygame.draw.rect(screen, COLOUR_MAP[player.colour], rect)
-
-            # Highlight the current player
-            border_colour = ORANGE if player == self.manager.current_player else BORDER_COLOUR
-            pygame.draw.rect(screen, border_colour, rect, BORDER_THICKNESS)
+            pygame.draw.rect(screen, BORDER_COLOUR, rect, BORDER_THICKNESS)
 
             # Draw player details
             name_text = self.font.render(player.name, True, BLACK)
             ai_text = self.font.render(player.ai_version, True, BLACK)
+            score_text = self.font.render(str(player.current_score()), True, BLACK)
 
-            if player.finished:
-                name_text = self.st_font.render(player.name, True, BLACK)
-                ai_text = self.st_font.render(player.ai_version, True, BLACK)
-            screen.blit(name_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE//2))
-            screen.blit(ai_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 1.5))
+            screen.blit(name_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 0.4))
+            screen.blit(ai_text, (rect.x + CELL_SIZE, rect.y + CELL_SIZE * 1.4))
+            screen.blit(score_text, (rect.x + CELL_SIZE * 5, rect.y + CELL_SIZE * 0.8))
         

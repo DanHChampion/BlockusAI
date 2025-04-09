@@ -27,5 +27,8 @@ class Player:
 
     def generate_move(self, legal_moves, board, round):
         return self.ai.generate_move(legal_moves, board, round)
+    
+    def current_score(self):
+        return sum(piece.value for piece in self.remaining_pieces)
 
 

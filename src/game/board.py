@@ -1,6 +1,5 @@
 import pygame
 from .constants import *
-from ..helpers import logic
 
 class PyGame_Board:
     def __init__(self):
@@ -9,7 +8,6 @@ class PyGame_Board:
     def draw(self, screen):
         # Gridlines
         pygame.draw.rect(screen, GRID_COLOUR, (MARGIN, MARGIN_TOP, (BOARD_SIZE * CELL_SIZE), (BOARD_SIZE * CELL_SIZE)))
-        
 
         for y in range(BOARD_SIZE):
             for x in range(BOARD_SIZE):

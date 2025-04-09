@@ -38,7 +38,8 @@ class Manager:
         self.player_list = [Player(player, self.ai_versions[player-1]) for player in range(1,no_of_players+1)]
         
         if shuffle:
-            random.shuffle(self.player_list)
+            shift = random.randint(1, 4)
+            self.player_list = self.player_list[shift:] + self.player_list[:shift]
 
         # Generate Board
         self.board_size = 3*no_of_players + 8

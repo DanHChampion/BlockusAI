@@ -106,8 +106,5 @@ def place_piece(board, colour, move):
 def calc_results(players_list):
     results = []
     for player in players_list:
-        total = 0
-        for piece in player.remaining_pieces:
-            total += piece.value
-        results.append([player.name, player.colour, total, player.ai_version, player.remaining_pieces])
+        results.append([player.name, player.colour, player.current_score(), player.ai_version, player.remaining_pieces])
     return results

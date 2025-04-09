@@ -19,7 +19,7 @@ def main():
         game.update()
         game.draw()
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(30)
 
     pygame.quit()
 
