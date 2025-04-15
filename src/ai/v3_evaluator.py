@@ -1,58 +1,62 @@
 import math
 import copy
-
 from ..helpers import logic
-from . import v2_greedy
 
-# Parameters
-CORNER_FACTOR = 6.0
-CORNERS_FACTOR = 0.3
+# Heuristic parameters based on limited testing
+CENTER_WEIGHT = 5.0
+EXPANSION_WEIGHT = 4.0
+BLOCK_OPPONENT_WEIGHT = 6.0
+PIECE_VALUE_WEIGHT = 3.0
 
-def generate_move(legal_moves, board, round):
-    # Pick move with highest value and allows players to move closer towards center
-    
-    if round <= 6:
-        fake_board = copy.deepcopy(board)
+# Pick move with highest score based on evaluation function
+def generate_move(legal_moves, board, game_round):
+    simulated_board = copy.deepcopy(board)
+    best_move = legal_moves[0]
+    highest_score = evaluate_move(best_move, simulated_board, game_round)
 
-        highest_value_moves = [legal_moves[0]]
-        max_value = highest_value_moves[0][2].value
+    for move in legal_moves[1:]:
+        current_score = evaluate_move(move, simulated_board, game_round)
+        if current_score > highest_score:
+            best_move = move
+            highest_score = current_score
 
-        for move in legal_moves:
-            if move[2].value == max_value:
-                highest_value_moves.append(move)
-            elif move[2].value > max_value:
-                max_value = move[2].value
-                highest_value_moves = [move]
+    return best_move
 
-        # Evaluate moves
-        best_move = highest_value_moves[0]
-        best_move_score = evaluate_move(best_move, fake_board)
-        for move in highest_value_moves[1:]:
-            current_move_score = evaluate_move(move, fake_board)
-            if  current_move_score > best_move_score:
-                best_move = move
-                best_move_score = current_move_score
+# Evaluates a move using a heuristic scoring system.
+def evaluate_move(move, simulated_board, game_round):
+    board_size = len(simulated_board)
+    score = 0
 
-        return best_move
-    
-    return v2_greedy.generate_move(legal_moves, board, round)
+    # Score based on proximity to the center
+    score += CENTER_WEIGHT * calculate_center_proximity(move[1], board_size)
 
+    # Simulate placing the piece on the board
+    simulated_board = logic.place_piece(simulated_board, move[2].colour, move)
 
-def evaluate_move(move, fake_board):
-    board_size = len(fake_board)
-    score = CORNER_FACTOR * score_point(move[1], board_size)
+    # Score based on expansion potential
+    new_legal_corners = logic.find_legal_corners(simulated_board, move[2].colour)
+    score += EXPANSION_WEIGHT * len(new_legal_corners)
 
-    # Fake move
-    fake_board = logic.place_piece(fake_board, move[2].colour, move)
+    # Penalize based on blocking opponent's moves
+    opponent_colours = get_all_player_colours(simulated_board, exclude=move[2].colour)
+    for colour in opponent_colours:
+        score -= BLOCK_OPPONENT_WEIGHT * len(logic.find_legal_corners(simulated_board, colour))
 
-    new_legal_corners = logic.find_legal_corners(fake_board, move[2].colour)
-
-    # Score each new legal corner
-    for corner in new_legal_corners:
-        score += CORNERS_FACTOR * score_point(corner, board_size)
+    # Score based on piece value
+    score += PIECE_VALUE_WEIGHT * calculate_piece_value(move[2], game_round)
 
     return score
 
+# Calculates a score based on the proximity of a point to the center of the board.
+def calculate_center_proximity(point, board_size):
+    center = board_size / 2
+    return 1 / (math.sqrt((center - point[0]) ** 2 + (center - point[1]) ** 2) + 1)
 
-def score_point(point, board_size):
-    return 1/(math.sqrt(math.pow((board_size/2)-point[0],2)+math.pow((board_size/2)-point[1],2))+0.01)
+# Calculates a score based on the area of the piece and the game round.
+def calculate_piece_value(piece, game_round):
+    return piece.value * (1.5 if game_round <= 6 else 0.8)
+
+# Retrieves all unique player colours present on the board, excluding a specific colour if provided.
+def get_all_player_colours(board, exclude=None):
+    return {cell for row in board for cell in row if cell and cell != exclude}
+

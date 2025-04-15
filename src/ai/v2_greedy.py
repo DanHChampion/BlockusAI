@@ -1,8 +1,7 @@
 import random
 
-def generate_move(legal_moves, board, round):
-    # Pick move with highest value
-
+# Pick move with highest value
+def generate_move(legal_moves, board, game_round):
     highest_value_moves = [legal_moves[0]]
     max_value = highest_value_moves[0][2].value
 
@@ -13,6 +12,4 @@ def generate_move(legal_moves, board, round):
             max_value = move[2].value
             highest_value_moves = [move]
 
-    chosen_move = highest_value_moves[random.randint(0,len(highest_value_moves)-1)]
-
-    return chosen_move
+    return highest_value_moves[random.randint(0,len(highest_value_moves)-1)]

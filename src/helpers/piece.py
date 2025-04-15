@@ -8,7 +8,6 @@ class Piece:
         piece, self.value = self.assign_piece(type)
         self.piece = transformations.set_colour(piece, colour)
         self.orientations = []
-        self.translations = []
 
     def __str__(self):
         return f"{self.type}"

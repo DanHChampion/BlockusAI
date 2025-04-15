@@ -23,7 +23,6 @@ class Manager:
         # Initialise Game
         self.round = 0
         self.turn = 0
-        # Check if input values are correct
         
         # Players
         self.no_of_players = 4

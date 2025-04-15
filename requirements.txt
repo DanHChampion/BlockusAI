@@ -1,0 +1,4 @@
+dotenv==0.0.5
+colorama==0.4.6
+pygame-ce==2.5.3
+environs==11.0.0

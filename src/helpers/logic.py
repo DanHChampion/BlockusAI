@@ -1,6 +1,3 @@
-import copy
-from .draw import _board
-
 def is_cell_within_bounds(board, cell): # cell = [row,col]
     rows = cols = len(board)
     if 0 <= cell[0] < rows and 0 <= cell[1] < cols:
