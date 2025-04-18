@@ -26,7 +26,7 @@ def run(manager):
     ICON = pygame.image.load("./src/gui/icon.png")
     pygame.display.set_icon(ICON)
     SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.HWSURFACE)
-    pygame.display.set_caption("Blockus")
+    pygame.display.set_caption("Blokus")
 
     # Clear the screen
     SCREEN.fill(WHITE)

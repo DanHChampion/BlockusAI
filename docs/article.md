@@ -1,7 +1,7 @@
 # Blokus, Brains, and Beating My Family (at Board Games... with AI)🕹️🤖
 *By [Dan Champion](https://danchampion.dev), Apr 2025*
 
-![Blockus_Board](https://m.media-amazon.com/images/I/71mZRnC4PpL.jpg)
+![Blokus_Board](https://m.media-amazon.com/images/I/71mZRnC4PpL.jpg)
 
 ## Introduction:
 
@@ -23,7 +23,7 @@ Here’s a breakdown of the key rules:
 6. Once you run out of valid moves, **you’re out** — the squares of the remaining pieces counted is your final score.
 7. **Lowest score** in the end is the winner!
 
-Note: There are 2 and 3 player variations of Blockus, but in this case I will just stick to the classic 4-player rules since that’s what I usually play.
+Note: There are 2 and 3 player variations of Blokus, but in this case I will just stick to the classic 4-player rules since that’s what I usually play.
 
 ### *So... why am I making this?*
 
@@ -459,7 +459,7 @@ def generate_move(legal_moves, board, round):
 
 **Evaluator AI**: This AI uses a simple evaluation function to score each legal move based on a few heuristics that come from my experience playing and tips collected from the internet. It will then pick the move with the highest score. 
 
-Here are some tips to win Blockus that this AI considers, gathered from various sources and my own experience:
+Here are some tips to win Blokus that this AI considers, gathered from various sources and my own experience:
 1. Use larger pieces at the beginning:
     - When given an option pick the largest piece and this reduces your score the most and smaller pieces are easier to place down later on than larger ones.
 2. Control the centre ground:
@@ -467,7 +467,7 @@ Here are some tips to win Blockus that this AI considers, gathered from various 
 3. Create more options for yourself:
     - When placing a piece down, see if it provides more or less corners than before.
 4. Shut down opportunities for your opponents:
-    - When placing a piece down, see if we a blocking any of their potential moves. In Blockus, you can usually see the remaining pieces of your opponents, so you can predict their next move and try to block them.
+    - When placing a piece down, see if we a blocking any of their potential moves. In Blokus, you can usually see the remaining pieces of your opponents, so you can predict their next move and try to block them.
 5. Think about when best to use the single square (or other small pieces):
     - Typically only as a last resort. It can also be used to free yourself in a tight situation/area, so it should be saved smartly.
 6. Leave *free placements* for later:
@@ -589,7 +589,7 @@ Technical Challenges
 
 Limitations
 COmpared to Chess or Connect 4, 
-BLockus is a game designed for 2 or 4 players. 
+Blokus is a game designed for 2 or 4 players. 
 when experiencing 4 players computations very heavy, cannot go indepth
 
 Further Work

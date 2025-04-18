@@ -5,7 +5,7 @@ from .constants import *
 from .manager import PyGame_Manager
 from ..helpers.logic import find_legal_corners, is_move_legal, place_piece
 
-class Blockus:
+class Blokus:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock

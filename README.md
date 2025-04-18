@@ -1,5 +1,5 @@
-# BlockusAI
-Creating an AI to play and win Blockus
+# BlokusAI
+Creating an AI to play and win Blokus
 
 # Badges
 

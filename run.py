@@ -12,8 +12,8 @@ from src.configurations.config import configuration
 
 # Intialisation
 parser = argparse.ArgumentParser(
-                    prog='Blockus',
-                    description='Blockus AI')
+                    prog='Blokus',
+                    description='Blokus AI')
 
 parser.add_argument('--phase')
 parser.add_argument('--shuffle', required=False, default=False)
