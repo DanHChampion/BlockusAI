@@ -1,15 +1,13 @@
 import time
 import random
 import pygame
-import os
-from .constants import *
-from ..configurations.config import configuration
+from ..gui.constants import *
+from ..configurations.constants import BOARD_SIZE, NUM_PLAYERS, ALL_PIECES
 from ..helpers import logic
 from .piece import PyGame_Piece
 from .board import PyGame_Board
 from ..helpers.player import Player
 from ..helpers import draw
-import json
 
 
 class PyGame_Manager():
@@ -21,22 +19,22 @@ class PyGame_Manager():
         self.round = 0
         self.turn = 0
 
-        self.no_of_players = 4
+        self.no_of_players = NUM_PLAYERS
         
-        ai_versions = ["hm"] + ["v4" for _ in range(1, self.no_of_players)]
+        ai_versions = ["hm"] + ["v3" for _ in range(1, self.no_of_players)]
         print("AI versions: ", ai_versions)
         self.ai_versions = ai_versions
 
         self.player_list = [Player(player, self.ai_versions[player - 1]) for player in range(1, self.no_of_players + 1)]
 
         # Randomise Order
-        shift = random.randint(1, 4)
+        shift = random.randint(1, self.no_of_players)
         self.player_list = self.player_list[shift:] + self.player_list[:shift]
 
         self.board_size = BOARD_SIZE
         self.board = PyGame_Board()
 
-        self.available_pieces_types = json.loads(configuration.ALL_PIECES)
+        self.available_pieces_types = ALL_PIECES
         for player in self.player_list:
             player.remaining_pieces = [PyGame_Piece(piece_type, player.colour) for piece_type in self.available_pieces_types]
 

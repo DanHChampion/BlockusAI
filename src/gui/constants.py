@@ -1,6 +1,7 @@
 from ..configurations.config import configuration
+from ..configurations.constants import BOARD_SIZE
 
-BOARD_SIZE = 20
+BOARD_SIZE = BOARD_SIZE
 CELL_SIZE = configuration.CELL_SIZE
 MARGIN = CELL_SIZE
 MARGIN_TOP = MARGIN + CELL_SIZE * 4

@@ -1,5 +1,5 @@
-# Rotate a piece clockwise (90deg)
 def rotate_piece_clockwise(piece, no_of_rotations):
+    # 90deg clockwise rotation
     rotated_piece = piece
     rows = len(piece)
     cols = len(piece[0])
@@ -16,7 +16,6 @@ def rotate_piece_clockwise(piece, no_of_rotations):
 
     return rotated_piece
 
-# Flip a piece vertically
 def flip_piece_vertical(piece):
     flipped_piece = piece[::-1]
     return flipped_piece

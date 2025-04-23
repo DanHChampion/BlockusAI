@@ -22,7 +22,6 @@ class AppConfig:
     DRAW: bool = False
     DRAW_RESULTS: bool = False
     STEP_BY_STEP: bool = False
-    ALL_PIECES: str = '["I1", "I2", "I3", "I4", "I5", "V3", "O4", "Z4", "T4", "L4", "U", "P", "Y", "L5", "N", "X", "W", "F", "T", "V5", "Z5"]'
 
     # PyGame Configs
     CELL_SIZE: int = 20

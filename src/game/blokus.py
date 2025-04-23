@@ -1,7 +1,7 @@
 import pygame
 import os
 from .piece import PyGame_Piece
-from .constants import *
+from ..gui.constants import *
 from .manager import PyGame_Manager
 from ..helpers.logic import find_legal_corners, is_move_legal, place_piece
 
@@ -28,11 +28,12 @@ class Blokus:
         return True
 
     def handle_event(self, event):
-        # Check if turn is humans turn
+        # Check if the restart button is clicked
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.restart_rect.collidepoint(event.pos):
                     self.manager.intialise()
                     self.pieces = self.manager.player_list[self.manager.hm_player_index].remaining_pieces
+        # Check if turn is humans turn
         if self.manager.current_player.ai_version == "hm":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for piece in self.pieces:

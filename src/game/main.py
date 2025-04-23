@@ -1,6 +1,6 @@
 import pygame
 from .blokus import Blokus
-from .constants import *
+from ..gui.constants import *
 
 def main():
     pygame.init()

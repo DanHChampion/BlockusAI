@@ -28,7 +28,7 @@ def evaluate_move(move, simulated_board, game_round):
     score = 0
 
     # Score based on proximity to the center
-    score += CENTER_WEIGHT * calculate_center_proximity(move[1], board_size)
+    score += CENTER_WEIGHT * calculate_center_proximity(move[1], len(simulated_board))
 
     # Simulate placing the piece on the board
     simulated_board = logic.place_piece(simulated_board, move[2].colour, move)

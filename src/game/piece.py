@@ -1,5 +1,5 @@
 import pygame
-from .constants import *
+from ..gui.constants import *
 from ..helpers import transformations
 from ..helpers.piece import Piece
 

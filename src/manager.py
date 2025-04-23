@@ -4,6 +4,7 @@ import random
 import csv
 
 from .configurations.config import configuration
+from .configurations.constants import BOARD_SIZE, NUM_PLAYERS, ALL_PIECES
 from .helpers import logic
 from .helpers.piece import Piece
 from .helpers.player import Player
@@ -16,16 +17,16 @@ STEP_BY_STEP = configuration.STEP_BY_STEP
 RECORD = configuration.RECORD
 
 class Manager:
-    def __init__(self, ai_versions, available_pieces_types = None, shuffle = False):
-        self.intialise(available_pieces_types, ai_versions, shuffle)
+    def __init__(self, ai_versions, shuffle = False):
+        self.intialise(ai_versions, shuffle)
         
-    def intialise(self, available_pieces_types, ai_versions, shuffle):
+    def intialise(self, ai_versions, shuffle):
         # Initialise Game
         self.round = 0
         self.turn = 0
         
         # Players
-        self.no_of_players = 4
+        self.no_of_players = NUM_PLAYERS
 
         # Validate AI versions
         self.ai_versions = ai_versions
@@ -41,14 +42,14 @@ class Manager:
             self.player_list = self.player_list[shift:] + self.player_list[:shift]
 
         # Generate Board
-        self.board_size = 20
+        self.board_size = BOARD_SIZE
         self.board = [[ 0 for x in range(0,self.board_size)] for y in range(0,self.board_size)]
 
         # Generate Pieces for players
-        self.available_pieces_types = available_pieces_types
+        self.available_pieces_types = ALL_PIECES
         self.player_pieces = []
         for player in self.player_list:
-            player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in available_pieces_types]
+            player.remaining_pieces = [Piece(piece_type,player.colour) for piece_type in ALL_PIECES]
 
         self.start_time = time.time()
 

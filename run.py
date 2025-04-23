@@ -21,12 +21,10 @@ parser.add_argument('--shuffle', required=False, default=False)
 args = parser.parse_args()
 
 AI_VERSIONS = json.loads(configuration.AI_LIST)
-ALL_PIECES = json.loads(configuration.ALL_PIECES)
 SHUFFLE = bool(args.shuffle)
 
 manager = Manager(
     ai_versions=AI_VERSIONS,
-    available_pieces_types=ALL_PIECES,
     shuffle=SHUFFLE
 )
 

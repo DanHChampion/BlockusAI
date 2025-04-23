@@ -1,5 +1,5 @@
 import pygame
-from .constants import *
+from ..gui.constants import *
 
 class PyGame_Board:
     def __init__(self):
