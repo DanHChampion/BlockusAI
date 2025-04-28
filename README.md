@@ -1,13 +1,14 @@
 # BlokusAI
 A showcase of multiple AI agents to master Blokus.
 
-<p align="center">![screenshot](./docs/images/GUI_screenshot.png)</p>
+<p align="center">
+    <img src="./docs/images/GUI_screenshot.png" alt="BlokusAI GUI Screenshot" width="400" height="400">
+</p>
 
 # Badges
-
-Link to Article:
-Link to Docs: #TODO
-Link to Demo: # TODO
+- Link to [Article](https://danhchampion.github.io/BlokusAI/)
+- Link to [Documentation](https://danhchampion.github.io/BlokusAI/docs.html) # TODO
+- Link to [Demo](https://danhchampion.github.io/BlokusAI/demo.html) # TODO
 
 ### Activate the virtual environment
 ```bash
